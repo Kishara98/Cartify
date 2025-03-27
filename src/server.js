@@ -2,6 +2,8 @@ const express = require('express');
 const { mongoConnection } = require('./config/mongoDBConnection');
 require('dotenv').config();
 
+const authRoutes = require('./routes/authRoutes.js');
+
 const app = express();
 app.use(express.json());
 
@@ -13,8 +15,10 @@ mongoConnection().then(()=> {
     });
 }).catch((error)=> {
     console.error(`Failed to start the server:`, error);
-    process.exiti(1)
+    process.exit(1)
 });
+app.use('/api/v1/user', authRoutes);
+
 
 // testing root endpoint
 app.use('/', (req, res)=> {
